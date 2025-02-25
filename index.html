@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecoplast</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            background-image: linear-gradient(45deg, rgba(230, 245, 255, 0.3) 25%, transparent 25%, transparent 50%, rgba(230, 245, 255, 0.3) 50%, rgba(230, 245, 255, 0.3) 75%, transparent 75%, transparent);
+            background-size: 100px 100px;
+        }
+        
+        .container {
+            max-width: 450px;
+            margin: 0 auto;
+            background-color: white;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .logo-icon {
+            display: flex;
+            margin-right: 5px;
+        }
+        
+        .logo-icon div {
+            width: 12px;
+            height: 12px;
+            margin: 1px;
+        }
+        
+        .logo-icon div:nth-child(1),
+        .logo-icon div:nth-child(4) {
+            background-color: #0e5875;
+        }
+        
+        .logo-icon div:nth-child(2) {
+            background-color: #4CAF50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8px;
+            color: white;
+        }
+        
+        .logo-text {
+            font-size: 24px;
+        }
+        
+        .logo-text span:first-child {
+            color: #4CAF50;
+        }
+        
+        .logo-text span:last-child {
+            color: #0e5875;
+        }
+        
+        .close-btn {
+            cursor: pointer;
+            font-size: 24px;
+        }
+        
+        .photo-upload {
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+        }
+        
+        .camera-icon {
+            background-color: #0e5875;
+            color: white;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .camera-icon i {
+            font-size: 40px;
+        }
+        
+        .camera-icon input[type="file"] {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        
+        .camera-icon img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .photo-text {
+            text-align: left;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+        
+        .recycler-section {
+            background-color: #0e5875;
+            color: white;
+            padding: 20px;
+            margin-top: 10px;
+        }
+        
+        .section-title {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .button-group {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .button {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 1px solid white;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+        
+        .button i {
+            margin-right: 5px;
+        }
+        
+        .bags-section {
+            background-color: #0e5875;
+            color: white;
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .bags-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        .bag-type {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 48%;
+        }
+        
+        .bag-icon {
+            margin-bottom: 10px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .bag-controls {
+            display: flex;
+            align-items: center;
+            margin-top: 5px;
+        }
+        
+        .bag-count {
+            font-size: 24px;
+            margin: 0 10px;
+            min-width: 30px;
+            text-align: center;
+        }
+        
+        .bag-label {
+            text-align: center;
+            font-size: 14px;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+        
+        .control-button {
+            background-color: #4CAF50;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .minus {
+            opacity: 0.6;
+        }
+        
+        /* Recycler form modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background-color: white;
+            width: 100%;
+            max-width: 450px;
+            height: 100vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        .recycler-form {
+            height: 100%;
+        }
+        
+        .form-container {
+            padding: 20px;
+            background-color: #0e5875;
+            color: white;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .form-group input[type="text"],
+        .form-group input[type="tel"] {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            background-color: #047299;
+            color: white;
+        }
+        
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .form-divider {
+            height: 1px;
+            background-color: rgba(255, 255, 255, 0.2);
+            margin: 20px 0;
+        }
+        
+        .materials-container,
+        .days-container {
+            margin: 20px 0;
+        }
+        
+        .materials-title,
+        .days-title {
+            margin-bottom: 20px;
+        }
+        
+        .materials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        
+        .material-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .material-checkbox {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #ccc;
+            margin-bottom: 10px;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .material-checkbox.checked {
+            border-color: #4CAF50;
+        }
+        
+        .material-checkbox.checked::after {
+            content: "";
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #4CAF50;
+        }
+        
+        .material-checkbox.yellow {
+            border-color: #FFD700;
+        }
+        
+        .material-checkbox.yellow.checked::after {
+            background-color: #FFD700;
+        }
+        
+        .material-checkbox.blue {
+            border-color: #1E90FF;
+        }
+        
+        .material-checkbox.blue.checked::after {
+            background-color: #1E90FF;
+        }
+        
+        .material-checkbox.purple {
+            border-color: #9370DB;
+        }
+        
+        .material-checkbox.purple.checked::after {
+            background-color: #9370DB;
+        }
+        
+        .material-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .material-icon img {
+            width: 100%;
+            height: auto;
+        }
+        
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+        
+        .day-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .day-checkbox {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #ccc;
+            margin-right: 10px;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .day-checkbox.checked {
+            border-color: white;
+        }
+        
+        .day-checkbox.checked::after {
+            content: "";
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: white;
+        }
+        
+        .modal-footer {
+            background-color: #f0f0f0;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid #ddd;
+        }
+        
+        .nav-button {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #666;
+        }
+        .bottle-container {
+        padding: 15px 0;
+    }
+    
+    .bottle-input-container {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    
+    .bottle-label {
+        margin-right: 10px;
+        white-space: nowrap;
+    }
+    
+    .bottle-slider {
+        flex-grow: 1;
+        height: 10px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 5px;
+        outline: none;
+        -webkit-appearance: none;
+    }
+    
+    .bottle-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #4CAF50;
+        cursor: pointer;
+    }
+    
+    .bottle-slider::-moz-range-thumb {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #4CAF50;
+        cursor: pointer;
+    }
+    
+    .bottle-counter {
+        margin-left: 15px;
+        font-size: 20px;
+        font-weight: bold;
+        min-width: 30px;
+        text-align: center;
+    }
+    
+    .submit-button {
+        width: 100%;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 25px;
+        padding: 12px;
+        font-size: 16px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.3s;
+    }
+    
+    .submit-button i {
+        margin-right: 8px;
+    }
+    
+    .submit-button:hover {
+        background-color: #3e8e41;
+    }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <div></div>
+                    <div>✓</div>
+                    <div></div>
+                    <div></div>
+                </div>
+                <div class="logo-text">
+                    <span>Eco</span><span>Plast</span>
+                </div>
+            </div>
+            <div class="close-btn">×</div>
+        </div>
+        
+        <div class="photo-upload">
+            <div class="camera-icon" id="camera-icon">
+                <i>📷</i>
+                <input type="file" id="photo-input" accept="image/*">
+            </div>
+            <div class="photo-text">
+                <p><strong>¡Clic sobre el ícono!</strong></p>
+                <p>Toma una foto a tu reciclador/a</p>
+            </div>
+        </div>
+        
+        <div class="recycler-section">
+            <p class="section-title">1. Reciclador/a a quién entregarás:</p>
+            
+            <div class="button-group">
+                <button class="button" id="add-recycler-btn">
+                    <i>👤</i> Añadir reciclador/a
+                </button>
+                <button class="button">
+                    <i>🔍</i> Buscar en el mapa
+                </button>
+            </div>
+        </div>
+         <div class="bags-section">
+            <p class="section-title">2. Número de botellas:</p>
+            
+            <div class="bags-container">
+                <div class="bag-type">
+                    <p class="bag-label">Cantida de<br>botellas</p>
+                    <div class="bag-icon">🧴</div>
+                    <div class="bag-controls">
+                        <div class="control-button minus" id="minus-supermarket">-</div>
+                        <div class="bag-count" id="supermarket-count">0</div>
+                        <div class="control-button" id="plus-supermarket">+</div>
+                    </div>
+                </div>
+                
+                <div class="bag-type">
+                    <p class="bag-label">Cantidad de<br>latas</p>
+                    <div class="bag-icon">🥫</div>
+                    <div class="bag-controls">
+                        <div class="control-button minus" id="minus-trash">-</div>
+                        <div class="bag-count" id="trash-count">0</div>
+                        <div class="control-button" id="plus-trash">+</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    <!--   <div class="bags-section">
+            <p class="section-title">2. Número de botellas:</p>
+            
+            <div class="bottle-container">
+                <div class="bottle-input-container">
+                    <label for="bottle-count" class="bottle-label">Cantidad de botellas:</label>
+                    <input type="range" id="bottle-count" min="0" max="100" value="0" class="bottle-slider">
+                    <div class="bottle-counter" id="bottle-counter">0</div>
+                </div>
+                
+                <button class="submit-button" id="submit-button">
+                    <i>✓</i> Enviar
+                </button>
+            </div>
+        </div>
+    </div>-->
+    
+    <!-- Recycler Form Modal -->
+    <div class="modal" id="recycler-modal">
+        <div class="modal-content">
+            <div class="header">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <div></div>
+                        <div>✓</div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div class="logo-text">
+                        <span>Eco</span><span>Plast</span>
+                    </div>
+                </div>
+                <div class="close-btn" id="close-modal">×</div>
+            </div>
+            
+            <div class="recycler-form">
+                <div class="photo-upload">
+                    <div class="camera-icon" id="form-camera-icon">
+                        <i>📷</i>
+                        <input type="file" id="form-photo-input" accept="image/*">
+                    </div>
+                    <div class="photo-text">
+                        <p><strong>¡Clic sobre el ícono!</strong></p>
+                        <p>Toma una foto a tu reciclador/a</p>
+                    </div>
+                </div>
+                
+                <div class="form-container">
+                    <form id="recycler-info-form">
+                        <div class="form-group">
+                            <label for="nombres">Nombres*:</label>
+                            <input type="text" id="nombres" name="nombres" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="apellido">Apellido*:</label>
+                            <input type="text" id="apellido" name="apellido" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="telefono">Teléfono*:</label>
+                            <input type="tel" id="telefono" name="telefono" required>
+                        </div>
+                        
+                        <div class="form-divider"></div>
+                        
+                        <div class="materials-container">
+                            <h3 class="materials-title">Materiales que recoge:</h3>
+                            
+                            <div class="materials-grid">
+                                <!-- Paper -->
+                                <div class="material-item">
+                                    <div class="material-checkbox yellow" data-material="paper"></div>
+                                    <div class="material-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="white" stroke-width="1">
+                                            <rect x="4" y="4" width="16" height="16" />
+                                            <line x1="8" y1="8" x2="16" y2="8" />
+                                            <line x1="8" y1="12" x2="16" y2="12" />
+                                            <line x1="8" y1="16" x2="16" y2="16" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                
+                                <!-- Box -->
+                                <div class="material-item">
+                                    <div class="material-checkbox yellow" data-material="box"></div>
+                                    <div class="material-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="white" stroke-width="1">
+                                            <rect x="2" y="6" width="20" height="12" />
+                                            <line x1="2" y1="10" x2="22" y2="10" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                
+                                <!-- Plastic bottle -->
+                                <div class="material-item">
+                                    <div class="material-checkbox green" data-material="plastic-bottle"></div>
+                                    <div class="material-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="white" stroke-width="1">
+                                            <path d="M8,2 L16,2 L16,4 C16,4 18,6 18,8 C18,10 18,18 18,20 C18,22 16,22 12,22 C8,22 6,22 6,20 C6,18 6,10 6,8 C6,6 8,4 8,4 L8,2 Z" />
+                                            <line x1="8" y1="8" x2="16" y2="8" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                
+                                <!-- Glass bottle -->
+                                <div class="material-item">
+                                    <div class="material-checkbox blue" data-material="glass-bottle"></div>
+                                    <div class="material-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="white" stroke-width="1">
+                                            <path d="M8,2 L16,2 L16,6 C16,6 14,8 14,10 C14,12 14,18 14,20 C14,22 10,22 10,20 C10,18 10,12 10,10 C10,8 8,6 8,6 L8,2 Z" />
+                                            <line x1="8" y1="6" x2="16" y2="6" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                
+                                <!-- Can -->
+                                <div class="material-item">
+                                    <div class="material-checkbox blue" data-material="can"></div>
+                                    <div class="material-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="white" stroke-width="1">
+                                            <rect x="6" y="4" width="12" height="16" rx="2" ry="2" />
+                                            <line x1="6" y1="8" x2="18" y2="8" />
+                                            <line x1="6" y1="16" x2="18" y2="16" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                
+                                <!-- Carton -->
+                                <div class="material-item">
+                                    <div class="material-checkbox purple" data-material="carton"></div>
+                                    <div class="material-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="white" stroke-width="1">
+                                            <path d="M3,10 L21,10 L21,18 L3,18 Z" />
+                                            <path d="M5,10 L5,6 L19,6 L19,10" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-divider"></div>
+                        
+                        <div class="days-container">
+                            <h3 class="days-title">Días en que trabaja:</h3>
+                            
+                            <div class="days-grid">
+                                <div class="day-item">
+                                    <div class="day-checkbox" data-day="lunes"></div>
+                                    <label>Lunes</label>
+                                </div>
+                                
+                                <div class="day-item">
+                                    <div class="day-checkbox" data-day="martes"></div>
+                                    <label>Martes</label>
+                                </div>
+                                
+                                <div class="day-item">
+                                    <div class="day-checkbox" data-day="miercoles"></div>
+                                    <label>Miércoles</label>
+                                </div>
+                                
+                                <div class="day-item">
+                                    <div class="day-checkbox" data-day="jueves"></div>
+                                    <label>Jueves</label>
+                                </div>
+                                
+                                <div class="day-item">
+                                    <div class="day-checkbox" data-day="viernes"></div>
+                                    <label>Viernes</label>
+                                </div>
+                                
+                                <div class="day-item">
+                                    <div class="day-checkbox" data-day="sabado"></div>
+                                    <label>Sábado</label>
+                                </div>
+                                
+                                <div class="day-item">
+                                    <div class="day-checkbox" data-day="domingo"></div>
+                                    <label>Domingo</label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="modal-footer">
+                    <button class="nav-button">|||</button>
+                    <button class="nav-button">○</button>
+                    <button class="nav-button">←</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Supermarket bag counter
+            const supermarketCount = document.getElementById('supermarket-count');
+            const plusSupermarket = document.getElementById('plus-supermarket');
+            const minusSupermarket = document.getElementById('minus-supermarket');
+            
+            // Trash bag counter
+            const trashCount = document.getElementById('trash-count');
+            const plusTrash = document.getElementById('plus-trash');
+            const minusTrash = document.getElementById('minus-trash');
+            
+            // Initialize counters
+            let supermarketBags = 0;
+            let trashBags = 0;
+            
+            // Add event listeners for supermarket bags
+            plusSupermarket.addEventListener('click', function() {
+                supermarketBags++;
+                supermarketCount.textContent = supermarketBags;
+                updateCounterStyles();
+            });
+            
+            minusSupermarket.addEventListener('click', function() {
+                if (supermarketBags > 0) {
+                    supermarketBags--;
+                    supermarketCount.textContent = supermarketBags;
+                    updateCounterStyles();
+                }
+            });
+            
+            // Add event listeners for trash bags
+            plusTrash.addEventListener('click', function() {
+                trashBags++;
+                trashCount.textContent = trashBags;
+                updateCounterStyles();
+            });
+            
+            minusTrash.addEventListener('click', function() {
+                if (trashBags > 0) {
+                    trashBags--;
+                    trashCount.textContent = trashBags;
+                    updateCounterStyles();
+                }
+            });
+            
+            // Update button styles based on counter values
+            function updateCounterStyles() {
+                // Update minus button styles for supermarket bags
+                if (supermarketBags === 0) {
+                    minusSupermarket.classList.add('minus');
+                } else {
+                    minusSupermarket.classList.remove('minus');
+                }
+                
+                // Update minus button styles for trash bags
+                if (trashBags === 0) {
+                    minusTrash.classList.add('minus');
+                } else {
+                    minusTrash.classList.remove('minus');
+                }
+            }
+            
+            // Photo upload functionality for main camera icon
+            const photoInput = document.getElementById('photo-input');
+            const cameraIcon = document.getElementById('camera-icon');
+            
+            photoInput.addEventListener('change', function(e) {
+                if (e.target.files && e.target.files[0]) {
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(e) {
+                        // Create an image element if it doesn't exist
+                        let img = cameraIcon.querySelector('img');
+                        if (!img) {
+                            img = document.createElement('img');
+                            cameraIcon.appendChild(img);
+                        }
+                        
+                        // Set the image source
+                        img.src = e.target.result;
+                        
+                        // Hide the camera icon
+                        const iconElement = cameraIcon.querySelector('i');
+                        if (iconElement) {
+                            iconElement.style.display = 'none';
+                        }
+                    };
+                    
+                    reader.readAsDataURL(e.target.files[0]);
+                }
+            });
+            
+            // Photo upload functionality for form camera icon
+            const formPhotoInput = document.getElementById('form-photo-input');
+            const formCameraIcon = document.getElementById('form-camera-icon');
+            
+            formPhotoInput.addEventListener('change', function(e) {
+                if (e.target.files && e.target.files[0]) {
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(e) {
+                        // Create an image element if it doesn't exist
+                        let img = formCameraIcon.querySelector('img');
+                        if (!img) {
+                            img = document.createElement('img');
+                            formCameraIcon.appendChild(img);
+                        }
+                        
+                        // Set the image source
+                        img.src = e.target.result;
+                        
+                        // Hide the camera icon
+                        const iconElement = formCameraIcon.querySelector('i');
+                        if (iconElement) {
+                            iconElement.style.display = 'none';
+                        }
+                    };
+                    
+                    reader.readAsDataURL(e.target.files[0]);
+                }
+            });
+            
+            // Modal functionality
+            const modal = document.getElementById('recycler-modal');
+            const addRecyclerBtn = document.getElementById('add-recycler-btn');
+            const closeModalBtn = document.getElementById('close-modal');
+            
+            addRecyclerBtn.addEventListener('click', function() {
+                modal.style.display = 'flex';
+            });
+            
+            closeModalBtn.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+            
+            // Handle clicks outside the modal
+            window.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+            
+            // Material checkboxes
+            const materialCheckboxes = document.querySelectorAll('.material-checkbox');
+            
+            materialCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('click', function() {
+                    this.classList.toggle('checked');
+                });
+            });
+            
+            // Day checkboxes
+            const dayCheckboxes = document.querySelectorAll('.day-checkbox');
+            
+            dayCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('click', function() {
+                    this.classList.toggle('checked');
+                });
+            });
+        });
+         document.addEventListener('DOMContentLoaded', function() {
+        // Bottle counter functionality
+        const bottleSlider = document.getElementById('bottle-count');
+        const bottleCounter = document.getElementById('bottle-counter');
+        const submitButton = document.getElementById('submit-button');
+        
+        bottleSlider.addEventListener('input', function() {
+            bottleCounter.textContent = this.value;
+        });
+        
+        submitButton.addEventListener('click', function() {
+            alert('Se han registrado ' + bottleSlider.value + ' botellas.');
+            // Aquí puedes agregar el código para enviar los datos al servidor
+        });
+    });
+    </script>
+</body>
+</html>
